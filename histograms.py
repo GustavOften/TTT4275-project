@@ -1,6 +1,7 @@
 import numpy as np 
 from numpy import genfromtxt
 import matplotlib.pyplot as plt
+import platform
 
 if(platform.system() == 'Windows'): #Windows
     class_1 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_1', delimiter=',')
