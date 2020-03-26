@@ -6,14 +6,14 @@ gaussian = lambda sigma, mu, x: np.sqrt(2*np.pi)**len(-x/2)*np.linalg.det(sigma)
     *np.exp(-1/2*(mu-x)@np.linalg.inv(sigma)@(mu-x))
 
 #Linux
-class_1 = genfromtxt('./TTT4275-project/task_1/Iris_TTT4275/class_1', delimiter=',')
-class_2 = genfromtxt('./TTT4275-project/task_1/Iris_TTT4275/class_2', delimiter=',')
-class_3 = genfromtxt('./TTT4275-project/task_1/Iris_TTT4275/class_3', delimiter=',')
+class_1 = genfromtxt('task_1/Iris_TTT4275/class_1', delimiter=',')
+class_2 = genfromtxt('task_1/Iris_TTT4275/class_2', delimiter=',')
+class_3 = genfromtxt('task_1/Iris_TTT4275/class_3', delimiter=',')
 
 #Windows
-class_1 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_1', delimiter=',')
-class_2 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_2', delimiter=',')
-class_3 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_3', delimiter=',')
+#class_1 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_1', delimiter=',')
+#class_2 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_2', delimiter=',')
+#class_3 = genfromtxt('..\TTT4275-project\\task_1\Iris_TTT4275\class_3', delimiter=',')
 
 mu_1 = sum(class_1[0:30,:])/30
 mu_2 = sum(class_2[0:30,:])/30
