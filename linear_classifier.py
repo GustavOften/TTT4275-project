@@ -21,14 +21,19 @@ tk_2[1,0] = 1
 tk_3 = np.zeros((3,1))
 tk_3[2,0] = 1
 norm_grad_MSE = 100
-alpha = 0.00001
-for i in range(1000):
-    N=40
+alpha = 0.01
+
+def sigmoid(X):
+   return 1/(1+np.exp(-X))
+
+for i in range(5000):
+    N=30
     grad_MSE = np.zeros((3,features+1))
     for n in range(N):
         for (_class,tk) in zip([class_1,class_2,class_3],[tk_1,tk_2,tk_3]):
             xk = np.append(_class[n,:],1).reshape((features+1,1))
-            gk = W@xk
+            zk = W@xk
+            gk = sigmoid(zk)
             temp = np.multiply(gk-tk,gk)
             temp = np.multiply(temp, np.ones((3,1))-gk)
             grad_MSE += alpha*temp@xk.T
