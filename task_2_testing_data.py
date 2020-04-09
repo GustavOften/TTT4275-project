@@ -23,6 +23,8 @@ else:  #Linux
 #                        oo="hood", uh="hud", uw="who'd")
 gender = np.array(['m','w','b','g'])
 range_m = [0, 44]; range_f = [45,92]; range_b = [93, 119]; range_g = [120,138]
+train_r_m = [0,22]; train_r_f = [45,67]; train_r_b = [93, 106]; train_r_g = [120, 129]
+test_r_m = [23, 44]; test_r_f = [68, 92]; test_r_b = [107, 119]; test_r_g = [130, 138]
 
 vowels = np.array(['ae', 'ah', 'aw', 'eh', 'er', 'ei', 'ih','iy','oa','oo','uh','uw'])
 
@@ -40,13 +42,40 @@ oo = numpy_array_data[1251:1390]
 uh = numpy_array_data[1390:1529]
 uw = numpy_array_data[1529:1668]
 
-for i in range(15):
-    plt.hist(uh[range_m[0]:range_m[1],i], label='man')
-    plt.hist(uh[range_f[0]:range_f[1],i], label='woman')
-    plt.hist(uh[range_b[0]:range_b[1],i], label='boy')
-    plt.hist(uh[range_g[0]:range_g[1],i], label='girl')
-    plt.legend()
-    plt.show()
+ae_test = np.concatenate((ae[train_r_m[0]:train_r_m[1], :],\
+                        ae[train_r_f[0]:train_r_f[1], :],\
+                        ae[train_r_b[0]:train_r_b[1], :],\
+                        ae[train_r_g[0]:train_r_g[1], :]), axis=0)
+
+# Sums the elements and divides by the number of elements that are not zero.
+mu_ae = sum(ae_test)/np.count_nonzero(ae_test, axis=0)
+# Creats a vector with the number of nonzero features 
+non_zero = np.matrix(np.count_nonzero(ae_test, axis=0))
+# Finds the position of every element that is zero
+zero_mask = (ae_test == 0)
+# Replaces the value of zero with the mean value, this will give an added zero for sigma
+ae_test[zero_mask] = mu_ae[np.where(zero_mask)[1]]
+# Creats a matrix with the number of features used for calculating each covariance
+number_of_elements = np.minimum(np.full((15,15), non_zero), np.full((15,15),non_zero.T))
+# Calculates the covariance
+sigma_ae = (ae_test - mu_ae).T@(ae_test-mu_ae)/number_of_elements
+
+
+
+##mu_aw = sum(class_2[0:30,:])/30
+#mu_eh = sum(class_3[0:30,:])/30
+#sigma_1 = (class_1[0:30,:]-mu_1).T@(class_1[0:30,:]-mu_1)/30
+#sigma_2 = (class_2[0:30,:]-mu_2).T@(class_2[0:30,:]-mu_2)/30
+
+#for i in range(15):
+#    plt.hist(ae[range_m[0]:range_m[1],i], label='man')
+#    plt.hist(ae[range_f[0]:range_f[1],i], label='woman')
+#    plt.hist(ae[range_b[0]:range_b[1],i], label='boy')
+#    plt.hist(ae[range_g[0]:range_g[1],i], label='girl')
+#    plt.axvline(x=mu_ae[i], label='mu')
+#    plt.legend()
+#    plt.show()
+
 
 
 
