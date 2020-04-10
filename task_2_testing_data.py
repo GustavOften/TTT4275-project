@@ -36,14 +36,13 @@ else:  #Linux
 #characters 4-5:  vowel (ae="had", ah="hod", aw="hawed", eh="head", er="heard",
 #                        ei="haid", ih="hid", iy="heed", oa=/o/ as in "boat",
 #                        oo="hood", uh="hud", uw="who'd")
-gender = np.array(['m','w','b','g'])
+
 range_m = [0, 44]; range_f = [45,92]; range_b = [93, 119]; range_g = [120,138]
 train_r_m = [0,22]; train_r_f = [45,67]; train_r_b = [93, 106]; train_r_g = [120, 129]
 test_r_m = [23, 44]; test_r_f = [68, 92]; test_r_b = [107, 119]; test_r_g = [130, 138]
 
-vowels = np.array(['ae', 'ah', 'aw', 'eh', 'er', 'ei', 'ih','iy','oa','oo','uh','uw'])
-
 numpy_array_data = data.to_numpy()
+
 ae = numpy_array_data[0:139]
 ah = numpy_array_data[139:278]
 aw = numpy_array_data[278:417]
@@ -128,6 +127,99 @@ uw_train = np.concatenate((uw[train_r_m[0]:train_r_m[1], :],\
                         uw[train_r_b[0]:train_r_b[1], :],\
                         uw[train_r_g[0]:train_r_g[1], :]), axis=0)
 mu_uw, sigma_uw = get_mu_and_full_covariance_matrix(uw_train)
+
+##############################################################
+############### Classification ###############################
+##############################################################
+
+ae_test = np.concatenate((ae[test_r_m[0]:test_r_m[1], :],\
+                        ae[test_r_f[0]:test_r_f[1], :],\
+                        ae[test_r_b[0]:test_r_b[1], :],\
+                        ae[test_r_g[0]:test_r_g[1], :]), axis=0) 
+
+ah_test = np.concatenate((ah[test_r_m[0]:test_r_m[1], :],\
+                        ah[test_r_f[0]:test_r_f[1], :],\
+                        ah[test_r_b[0]:test_r_b[1], :],\
+                        ah[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+aw_test = np.concatenate((aw[test_r_m[0]:test_r_m[1], :],\
+                        aw[test_r_f[0]:test_r_f[1], :],\
+                        aw[test_r_b[0]:test_r_b[1], :],\
+                        aw[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+eh_test = np.concatenate((eh[test_r_m[0]:test_r_m[1], :],\
+                        eh[test_r_f[0]:test_r_f[1], :],\
+                        eh[test_r_b[0]:test_r_b[1], :],\
+                        eh[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+er_test = np.concatenate((er[test_r_m[0]:test_r_m[1], :],\
+                        er[test_r_f[0]:test_r_f[1], :],\
+                        er[test_r_b[0]:test_r_b[1], :],\
+                        er[test_r_g[0]:test_r_g[1], :]), axis=0)             
+
+ei_test = np.concatenate((ei[test_r_m[0]:test_r_m[1], :],\
+                        ei[test_r_f[0]:test_r_f[1], :],\
+                        ei[test_r_b[0]:test_r_b[1], :],\
+                        ei[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+ih_test = np.concatenate((ih[test_r_m[0]:test_r_m[1], :],\
+                        ih[test_r_f[0]:test_r_f[1], :],\
+                        ih[test_r_b[0]:test_r_b[1], :],\
+                        ih[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+iy_test = np.concatenate((iy[test_r_m[0]:test_r_m[1], :],\
+                        iy[test_r_f[0]:test_r_f[1], :],\
+                        iy[test_r_b[0]:test_r_b[1], :],\
+                        iy[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+oa_test = np.concatenate((oa[test_r_m[0]:test_r_m[1], :],\
+                        oa[test_r_f[0]:test_r_f[1], :],\
+                        oa[test_r_b[0]:test_r_b[1], :],\
+                        oa[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+oo_test = np.concatenate((oo[test_r_m[0]:test_r_m[1], :],\
+                        oo[test_r_f[0]:test_r_f[1], :],\
+                        oo[test_r_b[0]:test_r_b[1], :],\
+                        oo[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+uh_test = np.concatenate((uh[test_r_m[0]:test_r_m[1], :],\
+                        uh[test_r_f[0]:test_r_f[1], :],\
+                        uh[test_r_b[0]:test_r_b[1], :],\
+                        uh[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+uw_test = np.concatenate((uw[test_r_m[0]:test_r_m[1], :],\
+                        uw[test_r_f[0]:test_r_f[1], :],\
+                        uw[test_r_b[0]:test_r_b[1], :],\
+                        uw[test_r_g[0]:test_r_g[1], :]), axis=0)
+
+
+confusion = np.zeros([15,15])
+classes = np.array([ae_test, ah_test, aw_test, eh_test, er_test, ei_test, ih_test, iy_test, oa_test, oo_test, uh_test, uw_test])
+mu = np.array([mu_ae, mu_ah, mu_aw, mu_eh, mu_er, mu_ei, mu_ih, mu_iy, mu_oa, mu_oo, mu_uh, mu_uw])
+sigma = np.array([sigma_ae, sigma_ah, sigma_aw, sigma_eh, sigma_er, sigma_ei, sigma_ih, sigma_iy, sigma_oa, sigma_oo, sigma_uh, sigma_uw])
+
+confusion = np.zeros([12,12])
+for n in range(65):
+    k = 0
+    for class_ in classes:
+        temp = []
+        for i in range(len(classes)):
+            temp.append(gaussian(sigma[i], mu[i], class_[n,:]))
+        classified_class = temp.index(max(temp))
+        confusion[k, classified_class] += 1
+        k += 1
+print(confusion)
+    
+#for n in range(20):
+#    i = 0
+#    for class_ in [class_1, class_2, class_3]:
+#        guassians = [gaussian(sigma_1,mu_1, class_[n,:]),\
+#                    gaussian(sigma_2,mu_2, class_[n,:]),\
+#                    gaussian(sigma_3,mu_3, class_[n,:])]
+#        classified_class = guassians.index(max(guassians))
+#        confusion_testing_data[i,classified_class] += 1
+#        i += 1
+
 
 #for i in range(15):
 #    plt.hist(ae[range_m[0]:range_m[1],i], label='man')
