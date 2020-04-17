@@ -16,7 +16,7 @@ else:  #Linux
 
 ##############################
 # Extracting wanted features #
-features=np.array([1,2,3]) #if you want to change features->CHANGE ME
+features=np.array([2,3]) #if you want to change features->CHANGE ME
 class_1=class_1[:,features]
 class_2=class_2[:,features]
 class_3=class_3[:,features]
@@ -30,22 +30,24 @@ test_begin=30
 test_end=50
 ####
 
-W = np.ones((3,num_f+1))
+W = np.zeros((3,num_f+1))
 tk_1 = np.zeros((3,1))
 tk_1[0,0] = 1
 tk_2 = np.zeros((3,1))
 tk_2[1,0] = 1
 tk_3 = np.zeros((3,1))
 tk_3[2,0] = 1
-norm_grad_MSE = 100
+norm_grad_MSE = 1
 alpha = 0.01
 
 def sigmoid(x):
    return 1/(1+np.exp(-x))
-
-for i in range(5000):
-    N=30 #how many to train on
+print(num_f)
+i = 0
+while(norm_grad_MSE > 0.001 and i < 5000):
+    N=train_end - train_begin #how many to train on
     grad_MSE = np.zeros((3,num_f+1))
+   
     for n in range(train_begin,train_end):
         for (_class,tk) in zip([class_1,class_2,class_3],[tk_1,tk_2,tk_3]):
             xk = np.append(_class[n,:],1).reshape((num_f+1,1))
@@ -56,9 +58,10 @@ for i in range(5000):
             grad_MSE += alpha*temp@xk.T
     W -= grad_MSE
     norm_grad_MSE = np.linalg.norm(grad_MSE)
+    i += 1
 np.savetxt('w.txt',W)
 W = np.loadtxt('w.txt')
-
+print(W)
 ###############################
 ####### Classification ########
 confusion = np.zeros([3,3])
@@ -69,7 +72,7 @@ for n in range(test_begin,test_end):
         classified_class = np.argmax(g, axis=0)
         confusion[i,classified_class] += 1
         i += 1
-
+print("Confusion matrix:")
 print(confusion)
 
 
