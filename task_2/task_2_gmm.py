@@ -5,6 +5,23 @@ import platform
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
 
+def gmm(sigma,mu,weights,x):
+    p = 0
+    for i in range(0,len(weights)):
+        #p += weights[i]*gaussian(np.diag(sigma[i]),mu[i],x) #change np.diag if cov_typ is full
+        p += weights[i]*gaussian(sigma[i],mu[i],x)
+    return p
+
+
+def find_error_rate(confusion):
+    N=np.sum(confusion)
+    error_counter=0
+    for i in range(confusion.shape[0]):
+        for j in range(confusion.shape[0]):
+            if(i != j):
+                error_counter += confusion[i,j]
+    return(error_counter/N)
+
 gaussian = lambda sigma, mu, x: np.sqrt(2*np.pi)**len(-x/2)*np.linalg.det(sigma)**(-1/2)\
     *np.exp(-1/2*(mu-x)@np.linalg.inv(sigma)@(mu-x))
 
@@ -163,35 +180,27 @@ uw_test = np.concatenate((uw[test_r_m[0]:test_r_m[1], :],\
                         uw[test_r_b[0]:test_r_b[1], :],\
                         uw[test_r_g[0]:test_r_g[1], :]), axis=0)
 
-
-def gmm(sigma,mu,weights,x):
-    p = 0
-    for i in range(0,len(weights)):
-        p += weights[i]*gaussian(np.diag(sigma[i]),mu[i],x) #change np.diag if cov_typ is full
-    return p
-
-
-#create model
-n_gaussians=3
-cov_typ='diag' #'diag' or 'full'
-
-
 confusion = np.zeros([15,15])
 classes_train = np.array([ae_train, ah_train, aw_train, eh_train, er_train, ei_train, ih_train, iy_train, oa_train, oo_train, uh_train, uw_train])
 classes = np.array([ae_test, ah_test, aw_test, eh_test, er_test, ei_test, ih_test, iy_test, oa_test, oo_test, uh_test, uw_test])
 clas_labels = np.array(['ae','ah','aw','eh','er','ei','ih','iy','oa','oo','uh','uw'])
 
+############################
+######## Create model########
+
+n_gaussians=3
+cov_typ='full' #'diag' or 'full'
+
 classifyers=dict()
 for (lbl,data_train) in zip(clas_labels,classes_train):
-    classifyers[lbl]=GaussianMixture(n_gaussians,covariance_type=cov_typ) #create model
+    classifyers[lbl]=GaussianMixture(n_gaussians,covariance_type=cov_typ,max_iter=500,tol=0.00001) #create model
     classifyers[lbl].fit(data_train) #train model
 
 
 
-print(f'means:{classifyers["ae"].means_.shape}')
-print(f'covariances:{classifyers["ae"].covariances_.shape}')
-print(f'weights:{classifyers["ae"].weights_.shape}')
 
+############################
+######## Classify ########
 confusion = np.zeros([12,12])
 for n in range(65):
     k = 0
