@@ -4,12 +4,12 @@ from numpy import genfromtxt
 import platform
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
-
+from data_behandling import replace_zeros_with_mean
 def gmm(sigma,mu,weights,x):
     p = 0
     for i in range(0,len(weights)):
-        #p += weights[i]*gaussian(np.diag(sigma[i]),mu[i],x) #change np.diag if cov_typ is full
-        p += weights[i]*gaussian(sigma[i],mu[i],x)
+        p += weights[i]*gaussian(np.diag(sigma[i]),mu[i],x) #change np.diag if cov_typ is full
+        #p += weights[i]*gaussian(sigma[i],mu[i],x)
     return p
 
 
@@ -33,6 +33,7 @@ else:  #Linux
     #data = data.transpose()
 
 
+
 ### Structure of data: 
 #character 1:     m=man, w=woman, b=boy, g=girl
 #characters 2-3:  talker number
@@ -46,6 +47,8 @@ train_r_m = [0,22]; train_r_f = [45,67]; train_r_b = [93, 106]; train_r_g = [120
 test_r_m = [23, 44]; test_r_f = [68, 92]; test_r_b = [107, 119]; test_r_g = [130, 138]
 
 numpy_array_data = data.to_numpy()
+numpy_array_data = replace_zeros_with_mean(numpy_array_data)
+
 
 ae = numpy_array_data[0:139]
 ah = numpy_array_data[139:278]
@@ -189,7 +192,7 @@ clas_labels = np.array(['ae','ah','aw','eh','er','ei','ih','iy','oa','oo','uh','
 ######## Create model########
 
 n_gaussians=3
-cov_typ='full' #'diag' or 'full'
+cov_typ='diag' #'diag' or 'full'
 
 classifyers=dict()
 for (lbl,data_train) in zip(clas_labels,classes_train):

@@ -239,14 +239,16 @@ def find_error_rate(confusion):
 
 print(f'Error rate for diagonal covariance:{find_error_rate(confusion_diagonal_covariance)}')
 print(f'Error rate for full covariance:{find_error_rate(confusion_full_covariance)}')
-#for i in range(15):
-#    plt.hist(ae[range_m[0]:range_m[1],i], label='man')
-#    plt.hist(ae[range_f[0]:range_f[1],i], label='woman')
-#    plt.hist(ae[range_b[0]:range_b[1],i], label='boy')
-#    plt.hist(ae[range_g[0]:range_g[1],i], label='girl')
-#    plt.axvline(x=mu_ae[i], label='mu')
-#    plt.legend()
-#    plt.show()
+for i in range(15):
+    #plt.hist(ae[range_m[0]:range_m[1],i], label='man')
+    #plt.hist(ae[range_f[0]:range_f[1],i], label='woman')
+    #plt.hist(ae[range_b[0]:range_b[1],i], label='boy')
+    #plt.hist(ae[range_g[0]:range_g[1],i], label='girl')
+    for j in range(12):
+        plt.hist(classes[j,i])
+    plt.axvline(x=mu_ae[i], label='mu')
+    plt.legend()
+    plt.show()
 
 
 
