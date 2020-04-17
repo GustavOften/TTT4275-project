@@ -37,9 +37,9 @@ else:  #Linux
 #                        ei="haid", ih="hid", iy="heed", oa=/o/ as in "boat",
 #                        oo="hood", uh="hud", uw="who'd")
 
-range_m = [0, 44]; range_f = [45,92]; range_b = [93, 119]; range_g = [120,138]
-train_r_m = [0,22]; train_r_f = [45,67]; train_r_b = [93, 106]; train_r_g = [120, 129]
-test_r_m = [23, 44]; test_r_f = [68, 92]; test_r_b = [107, 119]; test_r_g = [130, 138]
+range_m = [0, 44]; range_f = [45,92]; range_b = [93, 119]; range_g = [120,139]
+train_r_m = [0,23]; train_r_f = [45,68]; train_r_b = [93, 107]; train_r_g = [120, 130]
+test_r_m = [23, 45]; test_r_f = [68, 93]; test_r_b = [107, 120]; test_r_g = [130, 139]
 
 numpy_array_data = data.to_numpy()
 
@@ -238,20 +238,7 @@ def find_error_rate(confusion):
     return(error_counter/N)
 
 print(f'Error rate for diagonal covariance:{find_error_rate(confusion_diagonal_covariance)}')
-
 print(f'Error rate for full covariance:{find_error_rate(confusion_full_covariance)}')
-    
-#for n in range(20):
-#    i = 0
-#    for class_ in [class_1, class_2, class_3]:
-#        guassians = [gaussian(sigma_1,mu_1, class_[n,:]),\
-#                    gaussian(sigma_2,mu_2, class_[n,:]),\
-#                    gaussian(sigma_3,mu_3, class_[n,:])]
-#        classified_class = guassians.index(max(guassians))
-#        confusion_testing_data[i,classified_class] += 1
-#        i += 1
-
-
 #for i in range(15):
 #    plt.hist(ae[range_m[0]:range_m[1],i], label='man')
 #    plt.hist(ae[range_f[0]:range_f[1],i], label='woman')
