@@ -197,8 +197,23 @@ confusion = np.zeros([15,15])
 classes = np.array([ae_test, ah_test, aw_test, eh_test, er_test, ei_test, ih_test, iy_test, oa_test, oo_test, uh_test, uw_test])
 mu = np.array([mu_ae, mu_ah, mu_aw, mu_eh, mu_er, mu_ei, mu_ih, mu_iy, mu_oa, mu_oo, mu_uh, mu_uw])
 sigma = np.array([sigma_ae, sigma_ah, sigma_aw, sigma_eh, sigma_er, sigma_ei, sigma_ih, sigma_iy, sigma_oa, sigma_oo, sigma_uh, sigma_uw])
+diagonal_sigma = np.zeros([12,15,15])
+for i in range(len(sigma)):
+    diagonal_sigma[i,:,:] = np.diag(np.diag(sigma[i]))
+confusion_diagonal_covariance = np.zeros([12,12])
+for n in range(65):
+    k = 0
+    for class_ in classes:
+        temp = []
+        for i in range(len(classes)):
+            temp.append(gaussian(diagonal_sigma[i], mu[i], class_[n,:]))
+        classified_class = temp.index(max(temp))
+        confusion_diagonal_covariance[k, classified_class] += 1
+        k += 1
+print("The confusion matrix for the diagonal covariance matrix is:")
+print(confusion_diagonal_covariance)
 
-confusion = np.zeros([12,12])
+confusion_full_covariance = np.zeros([12,12])
 for n in range(65):
     k = 0
     for class_ in classes:
@@ -206,9 +221,25 @@ for n in range(65):
         for i in range(len(classes)):
             temp.append(gaussian(sigma[i], mu[i], class_[n,:]))
         classified_class = temp.index(max(temp))
-        confusion[k, classified_class] += 1
+        confusion_full_covariance[k, classified_class] += 1
         k += 1
-print(confusion)
+print("The confusion matrix for the full covariance matrix is:")
+print(confusion_full_covariance)
+
+############################
+######## Error-rate ########
+def find_error_rate(confusion):
+    N=np.sum(confusion)
+    error_counter=0
+    for i in range(confusion.shape[0]):
+        for j in range(confusion.shape[0]):
+            if(i != j):
+                error_counter += confusion[i,j]
+    return(error_counter/N)
+
+print(f'Error rate for diagonal covariance:{find_error_rate(confusion_diagonal_covariance)}')
+
+print(f'Error rate for full covariance:{find_error_rate(confusion_full_covariance)}')
     
 #for n in range(20):
 #    i = 0
