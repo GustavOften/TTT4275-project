@@ -3,6 +3,7 @@ import pandas as pd
 from numpy import genfromtxt
 import platform
 import matplotlib.pyplot as plt
+from format_matrix_for_latex import format_matrix_for_latex
 
 def get_mu_and_full_covariance_matrix(data):
     # Sums the elements and divides by the number of elements that are not zero.
@@ -201,7 +202,7 @@ diagonal_sigma = np.zeros([12,15,15])
 for i in range(len(sigma)):
     diagonal_sigma[i,:,:] = np.diag(np.diag(sigma[i]))
 confusion_diagonal_covariance = np.zeros([12,12])
-for n in range(65):
+for n in range(69):
     k = 0
     for class_ in classes:
         temp = []
@@ -212,9 +213,10 @@ for n in range(65):
         k += 1
 print("The confusion matrix for the diagonal covariance matrix is:")
 print(confusion_diagonal_covariance)
+format_matrix_for_latex(confusion_diagonal_covariance.astype(int))
 
 confusion_full_covariance = np.zeros([12,12])
-for n in range(65):
+for n in range(69):
     k = 0
     for class_ in classes:
         temp = []
@@ -225,7 +227,7 @@ for n in range(65):
         k += 1
 print("The confusion matrix for the full covariance matrix is:")
 print(confusion_full_covariance)
-
+#format_matrix_for_latex(confusion_full_covariance.astype(int))
 ############################
 ######## Error-rate ########
 def find_error_rate(confusion):
@@ -239,17 +241,18 @@ def find_error_rate(confusion):
 
 print(f'Error rate for diagonal covariance:{find_error_rate(confusion_diagonal_covariance)}')
 print(f'Error rate for full covariance:{find_error_rate(confusion_full_covariance)}')
-for i in range(15):
+#for i in range(15):
     #plt.hist(ae[range_m[0]:range_m[1],i], label='man')
     #plt.hist(ae[range_f[0]:range_f[1],i], label='woman')
     #plt.hist(ae[range_b[0]:range_b[1],i], label='boy')
     #plt.hist(ae[range_g[0]:range_g[1],i], label='girl')
-    for j in range(12):
-        plt.hist(classes[j,i])
-    plt.axvline(x=mu_ae[i], label='mu')
-    plt.legend()
-    plt.show()
+    #for j in [1,2]:
+    #    plt.hist(classes[j,i])
+    #plt.axvline(x=mu_ae[i], label='mu')
+    #plt.legend()
+    #plt.show()
 
-
+#format_matrix_for_latex(np.around(mu_ae, decimals=1))
+#format_matrix_for_latex(sigma_ae.astype(int))
 
 
