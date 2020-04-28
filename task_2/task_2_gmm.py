@@ -5,11 +5,16 @@ import platform
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
 from data_behandling import replace_zeros_with_mean
-def gmm(sigma,mu,weights,x):
+def gmm_full(sigma,mu,weights,x):
+    p = 0
+    for i in range(0,len(weights)):
+        p += weights[i]*gaussian(sigma[i],mu[i],x)
+    return p
+
+def gmm_diag(sigma,mu,weights,x):
     p = 0
     for i in range(0,len(weights)):
         p += weights[i]*gaussian(np.diag(sigma[i]),mu[i],x) #change np.diag if cov_typ is full
-        #p += weights[i]*gaussian(sigma[i],mu[i],x)
     return p
 
 
@@ -192,7 +197,12 @@ clas_labels = np.array(['ae','ah','aw','eh','er','ei','ih','iy','oa','oo','uh','
 ######## Create model########
 
 n_gaussians=3
-cov_typ='diag' #'diag' or 'full'
+cov_typ='full' #'diag' or 'full'
+cov_typ='diag'
+if( cov_typ=='full'):
+    gmm=gmm_full
+if( cov_typ=='diag'):
+    gmm=gmm_diag
 
 classifyers=dict()
 for (lbl,data_train) in zip(clas_labels,classes_train):
