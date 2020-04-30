@@ -5,6 +5,8 @@ import platform
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
 from data_behandling import replace_zeros_with_mean
+from format_matrix_for_latex import format_matrix_for_latex
+
 def gmm_full(sigma,mu,weights,x):
     p = 0
     for i in range(0,len(weights)):
@@ -196,9 +198,9 @@ clas_labels = np.array(['ae','ah','aw','eh','er','ei','ih','iy','oa','oo','uh','
 ############################
 ######## Create model########
 
-n_gaussians=3
-cov_typ='full' #'diag' or 'full'
-cov_typ='diag'
+n_gaussians=2
+cov_typ='diag' #'diag' or 'full'
+#cov_typ='diag'
 if( cov_typ=='full'):
     gmm=gmm_full
 if( cov_typ=='diag'):
@@ -206,11 +208,8 @@ if( cov_typ=='diag'):
 
 classifyers=dict()
 for (lbl,data_train) in zip(clas_labels,classes_train):
-    classifyers[lbl]=GaussianMixture(n_gaussians,covariance_type=cov_typ,max_iter=500,tol=0.00001) #create model
+    classifyers[lbl]=GaussianMixture(n_gaussians,covariance_type=cov_typ,max_iter=500,tol=1, init_params='kmeans') #create model
     classifyers[lbl].fit(data_train) #train model
-
-
-
 
 ############################
 ######## Classify ########
@@ -227,7 +226,11 @@ for n in range(65):
         classified_class = temp.index(max(temp))
         confusion[k, classified_class] += 1
         k += 1
+
+format_matrix_for_latex(confusion)
+
+print(f'Confusion matrix for diagonal covariance:')
 print(confusion)
 
-
 print(f'Error rate for diagonal covariance:{find_error_rate(confusion)}')
+
